@@ -1,4 +1,7 @@
-* {}
+* {
+  margin: 0;
+  padding: 0;
+}
 
 ul {
   list-style: none;
@@ -16,7 +19,11 @@ body {
 }
 
 .playground>ul {
-  border: 1px solid black
+  border: 1px solid black;
+  width: 250px;
+  margin: 0 auto;
+  padding: 0;
+
 }
 
 .playground>ul>li {
@@ -31,5 +38,5 @@ body {
 .playground>ul>li>ul>li {
   width: 25px;
   height: 25px;
-  outline: 1px outline #ccc;
+  outline: 1px solid #ccc;
 }
