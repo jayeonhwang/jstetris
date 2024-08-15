@@ -11,6 +11,17 @@ let score = 0;
 let duration = 500;
 let downInterval;
 let tempMovingItem;
+
+//
+const BLOCKS = {
+  square: [
+    [[0, 0], [0, 1], [1, 0], [1, 1]],
+    [],
+    [],
+    [],
+  ]
+};
+
 const movingItem = {
   type: "",
   direction: 0,
@@ -18,13 +29,22 @@ const movingItem = {
   left: 0,
 };
 
+
 init();
 
 //Functions 
 function init() {
+  tempMovingItem = { ...movingItem };
+
+  //set a default type if it's not valid
+  if (!BLOCKS[tempMovingItem.type]) {
+    tempMovingItem.type = "square";
+  }
+
   for (let i = 0; i < GameRows; i++) {
     prependNewLine();
   }
+  renderBlocks();
 }
 
 function prependNewLine() {
@@ -36,4 +56,17 @@ function prependNewLine() {
   }
   li.prepend(ul);
   playground.prepend(li);
+}
+
+function renderBlocks() {
+  const { type, direction, top, left } = tempMovingItem;
+  BLOCKS[type][direction].forEach(block => {
+    const x = block[0];
+    const y = block[1];
+    const target = playground.childNodes[y].childNodes[0].childNodes[x];
+    target.classList.add(type);
+  });
+
+
+
 }
