@@ -24,18 +24,18 @@ const BLOCKS = {
   ],
   tree: [
     [[2, 1], [0, 1], [1, 0], [1, 1]],
-    [],
-    [],
-    [],
+    [[1, 2], [0, 1], [1, 0], [1, 1]],
+    [[1, 2], [0, 1], [2, 1], [1, 1]],
+    [[2, 1], [1, 2], [1, 0], [1, 1]]
   ],
 
 };
 
 const movingItem = {
-  type: "square",
+  type: "tree",
   direction: 0,
   top: 0,
-  left: 3,
+  left: 0,
 };
 
 
@@ -67,14 +67,14 @@ function prependNewLine() {
   playground.prepend(li);
 }
 
-function renderBlocks() {
+function renderBlocks(moveType = "") {
   const { type, direction, top, left } = tempMovingItem;
   const moveBlocks = document.querySelectorAll(".moving");
   moveBlocks.forEach(moving => {
     moving.classList.remove(type, "moving");
   });
 
-  BLOCKS[type][direction].forEach(block => {
+  BLOCKS[type][direction].some(block => {
     const x = block[0] + left;
     const y = block[1] + top;
 
@@ -87,10 +87,21 @@ function renderBlocks() {
 
       setTimeout(() => {
         renderBlocks();
+        if (moveType === "top") {
+          seizeBlock();
+        }
       }, 0
       );
+      return true;
     }
   });
+  movingItem.left = left;
+  movingItem.top = top;
+  movingItem.direction = direction;
+}
+
+function seizeBlock() {
+  console.log('seizeBlock');
 }
 
 
@@ -103,6 +114,12 @@ function checkEmpty(target) {
 
 function moveBlock(moveType, amount) {
   tempMovingItem[moveType] += amount;
+  renderBlocks(moveType);
+}
+
+function changeDirection() {
+  const direction = tempMovingItem.direction;
+  direction === 3 ? tempMovingItem.direction = 0 : tempMovingItem.direction += 1;
   renderBlocks();
 }
 
@@ -120,7 +137,11 @@ document.addEventListener("keydown", e => {
     case 40:
       moveBlock("top", 1);
       break;
+    case 38:
+      changeDirection();
+      break;
     default:
       break;
+
   }
 });
