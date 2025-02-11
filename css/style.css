@@ -41,8 +41,22 @@ body {
 }
 
 .square {
-  background: greenyellow;
+  background: lightblue;
 }
 .tree {
   background: yellow;
+}
+
+.bar {
+  background: red;
+}
+.zee {
+  background: greenyellow;
+}
+.elLeft {
+  background: purple;
+}
+
+.elright {
+  background: pink;
 }

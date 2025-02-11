@@ -28,13 +28,10 @@ init();
 
 //Functions 
 function init() {
+
   tempMovingItem = { ...movingItem };
 
   //set a default type if it's not valid
-  if (!BLOCKS[tempMovingItem.type]) {
-    tempMovingItem.type = "square";
-  }
-
   for (let i = 0; i < GameRows; i++) {
     prependNewLine();
   }
@@ -96,6 +93,10 @@ function seizeBlock() {
 }
 
 function generateNewBlock() {
+  const blockArray = Object.entries(BLOCKS);
+  const randomIndex = Math.floor(Math.random() * blockArray.length);
+
+  movingItem.type = blockArray[randomIndex][0];
   movingItem.top = 0;
   movingItem.left = 3;
   movingItem.direction = 0;
