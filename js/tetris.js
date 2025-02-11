@@ -4,6 +4,9 @@ import BLOCKS from "./blocks.js";
 
 //DOM
 const playground = document.querySelector(".playground > ul");
+const gameText = document.querySelector(".game-text");
+const scoreDisplay = document.querySelector(".score");
+
 
 // Setting
 
@@ -66,9 +69,12 @@ function renderBlocks(moveType = "") {
       target.classList.add(type, "moving");
     } else {
       tempMovingItem = { ...movingItem };
-
+      if (moveType === 'retry') {
+        clearInterval(downInterval);
+        showGameOverText();
+      }
       setTimeout(() => {
-        renderBlocks();
+        renderBlocks('retry');
         if (moveType === "top") {
           seizeBlock();
         }
@@ -89,7 +95,24 @@ function seizeBlock() {
     moving.classList.add("seized");
 
   });
+  checkMatch();
   generateNewBlock();
+}
+
+function checkMatch() {
+  const childNodes = playground.childNodes;
+  childNodes.forEach(child => {
+    let matched = true;
+    child.children[0].childNodes.forEach(li => {
+      if (!li.classList.contains("seized")) {
+        matched = false;
+      }
+    });
+    if (matched) {
+      child.remove();
+      prependNewLine();
+    }
+  });
 }
 
 function generateNewBlock() {
@@ -128,6 +151,17 @@ function changeDirection() {
   renderBlocks();
 }
 
+function dropBlock() {
+  clearInterval(downInterval);
+  downInterval = setInterval(() => {
+    moveBlock('top', 1);
+  }, 10);
+}
+
+
+function showGameOverText() {
+  gameText.style.display = "flex";
+}
 // event handling 
 
 document.addEventListener("keydown", e => {
@@ -144,6 +178,9 @@ document.addEventListener("keydown", e => {
       break;
     case 38:
       changeDirection();
+      break;
+    case 32:
+      dropBlock();
       break;
     default:
       break;
